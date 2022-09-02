@@ -63,7 +63,6 @@ def astar(st, en):
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      assert(w >= 0 and c >= 0)
       if dis[v] > dis[u] + w and co + c <= budget:
         dis[v] = dis[u] + w
         pa[v] = u

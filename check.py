@@ -1,6 +1,5 @@
 from math import sqrt
 import json
-from xml.sax.handler import property_lexical_handler
 
 filenames = ['Coord', 'Cost', 'Dist', 'G']
 filesz = {
