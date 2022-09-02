@@ -40,12 +40,9 @@ class estimate:
 
 def astar(st, en):
   vis = [False] * (n + 1)
-  dis = [float('inf')] * (n + 1)
   pa = [0] * (n + 1)
-  cost = float('inf')
 
   pq = PriorityQueue()
-  dis[st] = 0
   pq.put(estimate(0, 0, st))
 
   while not pq.empty():
@@ -54,8 +51,13 @@ def astar(st, en):
     co = cur.co
     u = cur.u
     if u == en:
-      cost = co
-      break
+      p = en
+      path = []
+      while p != 0:
+        path.append(p)
+        p = pa[p]
+      path.reverse()
+      return d, co, path
     if vis[u]:
       continue
     vis[u] = True
@@ -63,20 +65,13 @@ def astar(st, en):
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      if dis[v] > dis[u] + w and co + c <= budget:
-        dis[v] = dis[u] + w
+      if not vis[v] and co + c <= budget:
+        disv = d + w
         pa[v] = u
-        pq.put(estimate(dis[v], co + c, v))
+        pq.put(estimate(disv, co + c, v))
   # no path
-  if dis[en] == float('inf'):
-    return dis[en], cost, []
-  p = en
-  path = []
-  while p != 0:
-    path.append(p)
-    p = pa[p]
-  path.reverse()
-  return dis[en], cost, path
+  return float('inf'), float('inf'), []
+
 
 dis, cost, path = astar(st, en)
 
