@@ -22,19 +22,21 @@ budget = 287932
 # do not guarantee the cost is minimum
 def dijkstra(st, en):
   vis = [False] * (n + 1)
-  dis = [float('inf')] * (n + 1)
   pa = [0] * (n + 1)
-  cost = float('inf')
 
   pq = PriorityQueue()
-  dis[st] = 0
   pq.put((0, 0, st))
 
   while not pq.empty():
     (d, co, u) = pq.get()
     if u == en: # UCS optimization
-      cost = co
-      break
+      p = en
+      path = []
+      while p != 0:
+        path.append(p)
+        p = pa[p]
+      path.reverse()
+      return d, co, path
     if vis[u]:
       continue
     vis[u] = True
@@ -42,20 +44,12 @@ def dijkstra(st, en):
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      if dis[v] > dis[u] + w and co + c <= budget:
-        dis[v] = dis[u] + w
+      if not vis[v] and co + c <= budget:
         pa[v] = u
-        pq.put((dis[v], co + c, v))
+        pq.put((d + w, co + c, v))
   # no path
-  if dis[en] == float('inf'):
-    return dis[en], cost, []
-  p = en
-  path = []
-  while p != 0:
-    path.append(p)
-    p = pa[p]
-  path.reverse()
-  return dis[en], cost, path
+  return float('inf'), float('inf'), []
+
 
 dis, cost, path = dijkstra(st, en)
 

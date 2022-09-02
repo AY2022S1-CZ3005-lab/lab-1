@@ -20,37 +20,33 @@ en = 50
 
 def dijkstra(st, en):
   vis = [False] * (n + 1)
-  dis = [float('inf')] * (n + 1)
   pa = [0] * (n + 1)
 
   pq = PriorityQueue()
-  dis[st] = 0
   pq.put((0, st))
 
   while not pq.empty():
     (d, u) = pq.get()
     if u == en:  # UCS optimiaztion
-      break
+      p = en
+      path = []
+      while p != 0:
+        path.append(p)
+        p = pa[p]
+      path.reverse()
+      return d, path
     if vis[u]:
       continue
     vis[u] = True
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
-      if dis[v] > dis[u] + w:
-        dis[v] = dis[u] + w
+      if not vis[v]:
         pa[v] = u
-        pq.put((dis[v], v))
+        pq.put((d + w, v))
   # no path
-  if dis[en] == float('inf'):
-    return dis[en], []
-  p = en
-  path = []
-  while p != 0:
-    path.append(p)
-    p = pa[p]
-  path.reverse()
-  return dis[en], path
+  return float('inf'), []
+  
 
 dis, path = dijkstra(st, en)
 

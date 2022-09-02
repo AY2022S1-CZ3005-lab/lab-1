@@ -66,9 +66,8 @@ def astar(st, en):
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
       if not vis[v] and co + c <= budget:
-        disv = d + w
         pa[v] = u
-        pq.put(estimate(disv, co + c, v))
+        pq.put(estimate(d + w, co + c, v))
   # no path
   return float('inf'), float('inf'), []
 
