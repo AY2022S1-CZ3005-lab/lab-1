@@ -36,7 +36,7 @@ for key, value in Dist.items():
   assert(value >= 0)
 
 print('good for dijkstra')
-# edge(u, v) == physical dis(u, v)
+# edge(u, v) >= physical dis(u, v)
 n = len(G)
 eps = 1e-5
 
