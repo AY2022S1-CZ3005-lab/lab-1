@@ -1,4 +1,3 @@
-from audioop import reverse
 import json
 from queue import PriorityQueue
 
@@ -38,7 +37,7 @@ def dijkstra(st, en):
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
-
+      assert(w >= 0)
       if dis[v] > dis[u] + w:
         dis[v] = dis[u] + w
         pa[v] = u

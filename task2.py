@@ -1,4 +1,3 @@
-from audioop import reverse
 import json
 from queue import PriorityQueue
 
@@ -33,16 +32,18 @@ def dijkstra(st, en):
 
   while not pq.empty():
     (d, co, u) = pq.get()
-    if u == en:
+    if u == en: # UCS optimization
       cost = co
       break
     if vis[u]:
       continue
+    vis[u] = True
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      if dis[v] > dis[u] + w and co + c < budget:
+      assert(w >= 0 and c >= 0)
+      if dis[v] > dis[u] + w and co + c <= budget:
         dis[v] = dis[u] + w
         pa[v] = u
         pq.put((dis[v], co + c, v))
