@@ -35,7 +35,7 @@ class estimate:
     self.u = u
 
   def __lt__(self, other):
-    return self.d + h[self.u] < other.d + h[self.u]
+    return self.d + h[self.u] < other.d + h[other.u]
 
 
 def astar(st, en):
