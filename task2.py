@@ -19,7 +19,7 @@ st = 1
 en = 50
 budget = 287932
 
-# do not guarantee the cost is minimum
+# guarantee the cost is minimum
 def dijkstra(st, en):
   vis = [False] * (n + 1)
   pa = [0] * (n + 1)
