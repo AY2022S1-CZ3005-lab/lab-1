@@ -28,7 +28,7 @@ for i in range(1, n + 1):
   (x, y) = Coord[str(i)]
   h[i] = sqrt((x - en_x) ** 2 + (y - en_y) ** 2)
 
-class estimate:
+class state:
   def __init__(self, d, co, u):
     self.d = d
     self.co = co
@@ -51,8 +51,8 @@ def astar(st, en):
   pq = PriorityQueue()
   cost = [float('inf')] * (n + 1)
   dis = [float('inf')] * (n + 1)
-  pq.put(estimate(0, 0, st))
-  pa[estimate(0, 0, st)] = None
+  pq.put(state(0, 0, st))
+  pa[state(0, 0, st)] = None
   while not pq.empty():
     cur = pq.get()
     d = cur.d
@@ -70,7 +70,7 @@ def astar(st, en):
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      next = estimate(d + w, co + c, v)
+      next = state(d + w, co + c, v)
       if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co >= budget:
         continue
       cost[v] = c + co
