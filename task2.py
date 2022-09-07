@@ -1,4 +1,5 @@
 import json
+from operator import ne
 from queue import PriorityQueue
 
 with open('G.json') as f:
@@ -20,38 +21,41 @@ en = 50
 budget = 287932
 
 # guarantee the cost is minimum
-def dijkstra(st, en):
-  vis = [False] * (n + 1)
-  pa = [0] * (n + 1)
-
+def UCS(st, en):
+  pa = dict()
+  vis = set()
   pq = PriorityQueue()
-  pq.put((0, 0, st, 0))
-
+  cost = [float('inf')] * (n + 1)
+  dis = [float('inf')] * (n + 1)
+  pq.put((0, 0, st))
+  pa[(0, 0, st)] = None
   while not pq.empty():
-    (d, co, u, fa) = pq.get()
-    if u == en: # UCS optimization
-      p = fa
-      path = [en]
-      while p != 0:
-        path.append(p)
+    cur = pq.get()
+    (d, co, u) = cur
+    if u == en: 
+      path = []
+      p = cur
+      while p:
+        path.append(p[2])
         p = pa[p]
       path.reverse()
       return d, co, path
-    if vis[u]:
-      continue
-    vis[u] = True
-    pa[u] = fa
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      if not vis[v] and co + c <= budget:
-        pq.put((d + w, co + c, v, u))
+      next = (d + w, co + c, v)
+      if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co >= budget:
+        continue
+      cost[v] = c + co
+      dis[v] = d + w
+      pa[next] = cur
+      pq.put(next)
   # no path
   return float('inf'), float('inf'), []
 
 
-dis, cost, path = dijkstra(st, en)
+dis, cost, path = UCS(st, en)
 
 print('Shortest path: ', end = '')
 sep = ''
