@@ -37,8 +37,8 @@ def dijkstra(st, en):
       return d, co, path
     if vis[u]:
       continue
-    pa[u] = fa
     vis[u] = True
+    pa[u] = fa
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
@@ -58,4 +58,4 @@ for v in path:
   sep = '->'
 print()
 print('Shortest distance: ', dis)
-print('Totol energy cost: ', cost)
+print('Total energy cost: ', cost)
