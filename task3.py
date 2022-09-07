@@ -29,47 +29,54 @@ for i in range(1, n + 1):
   h[i] = sqrt((x - en_x) ** 2 + (y - en_y) ** 2)
 
 class estimate:
-  def __init__(self, d, co, u, fa):
+  def __init__(self, d, co, u):
     self.d = d
     self.co = co
     self.u = u
-    self.fa = fa
 
   def __lt__(self, other):
     return self.d + h[self.u] < other.d + h[other.u]
 
+  def __hash__(self):
+      return hash((self.d, self.co, self.u))
 
+  def __eq__(self, other):
+      return (self.d, self.co, self.u) == (other.d, other.co, other.u)
+
+
+# guarantee the cost is minimum
 def astar(st, en):
-  vis = [False] * (n + 1)
-  pa = [0] * (n + 1)
-
+  pa = dict()
+  vis = set()
   pq = PriorityQueue()
-  pq.put(estimate(0, 0, st, 0))
-
+  cost = [float('inf')] * (n + 1)
+  dis = [float('inf')] * (n + 1)
+  pq.put(estimate(0, 0, st))
+  pa[estimate(0, 0, st)] = None
   while not pq.empty():
     cur = pq.get()
     d = cur.d
     co = cur.co
     u = cur.u
-    fa = cur.fa
-    if u == en:
-      p = fa
-      path = [en]
-      while p != 0:
-        path.append(p)
+    if u == en: 
+      path = []
+      p = cur
+      while p:
+        path.append(p.u)
         p = pa[p]
       path.reverse()
       return d, co, path
-    if vis[u]:
-      continue
-    vis[u] = True
-    pa[u] = fa
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
-      if not vis[v] and co + c <= budget:
-        pq.put(estimate(d + w, co + c, v, u))
+      next = estimate(d + w, co + c, v)
+      if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co >= budget:
+        continue
+      cost[v] = c + co
+      dis[v] = d + w
+      pa[next] = cur
+      pq.put(next)
   # no path
   return float('inf'), float('inf'), []
 
