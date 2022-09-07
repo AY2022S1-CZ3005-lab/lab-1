@@ -25,13 +25,13 @@ def dijkstra(st, en):
   pa = [0] * (n + 1)
 
   pq = PriorityQueue()
-  pq.put((0, 0, st))
+  pq.put((0, 0, st, 0))
 
   while not pq.empty():
-    (d, co, u) = pq.get()
+    (d, co, u, fa) = pq.get()
     if u == en: # UCS optimization
-      p = en
-      path = []
+      p = fa
+      path = [en]
       while p != 0:
         path.append(p)
         p = pa[p]
@@ -40,13 +40,13 @@ def dijkstra(st, en):
     if vis[u]:
       continue
     vis[u] = True
+    pa[u] = fa
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
       if not vis[v] and co + c <= budget:
-        pa[v] = u
-        pq.put((d + w, co + c, v))
+        pq.put((d + w, co + c, v, u))
   # no path
   return float('inf'), float('inf'), []
 

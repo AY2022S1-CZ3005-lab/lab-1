@@ -29,10 +29,11 @@ for i in range(1, n + 1):
   h[i] = sqrt((x - en_x) ** 2 + (y - en_y) ** 2)
 
 class estimate:
-  def __init__(self, d, co, u):
+  def __init__(self, d, co, u, fa):
     self.d = d
     self.co = co
     self.u = u
+    self.fa = fa
 
   def __lt__(self, other):
     return self.d + h[self.u] < other.d + h[other.u]
@@ -43,16 +44,17 @@ def astar(st, en):
   pa = [0] * (n + 1)
 
   pq = PriorityQueue()
-  pq.put(estimate(0, 0, st))
+  pq.put(estimate(0, 0, st, 0))
 
   while not pq.empty():
     cur = pq.get()
     d = cur.d
     co = cur.co
     u = cur.u
+    fa = cur.fa
     if u == en:
-      p = en
-      path = []
+      p = fa
+      path = [en]
       while p != 0:
         path.append(p)
         p = pa[p]
@@ -61,13 +63,13 @@ def astar(st, en):
     if vis[u]:
       continue
     vis[u] = True
+    pa[u] = fa
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
       if not vis[v] and co + c <= budget:
-        pa[v] = u
-        pq.put(estimate(d + w, co + c, v))
+        pq.put(estimate(d + w, co + c, v, u))
   # no path
   return float('inf'), float('inf'), []
 
