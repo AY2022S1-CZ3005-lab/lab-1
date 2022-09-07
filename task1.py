@@ -23,10 +23,10 @@ def dijkstra(st, en):
   pa = [0] * (n + 1)
 
   pq = PriorityQueue()
-  pq.put((0, st, 0))
+  pq.put((0, 0, st, 0))
 
   while not pq.empty():
-    (d, u, fa) = pq.get()
+    (d, co, u, fa) = pq.get()
     if u == en:  # UCS optimiaztion
       p = fa
       path = [en]
@@ -34,7 +34,7 @@ def dijkstra(st, en):
         path.append(p)
         p = pa[p]
       path.reverse()
-      return d, path
+      return d, co, path
     if vis[u]:
       continue
     pa[u] = fa
@@ -42,13 +42,14 @@ def dijkstra(st, en):
     for v_str in G[str(u)]:
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
+      c = Cost[str(u) + ',' + str(v)]
       if not vis[v]:
-        pq.put((d + w, v, u))
+        pq.put((d + w, co +c, v, u))
   # no path
-  return float('inf'), []
+  return float('inf'), float('inf'), []
   
 
-dis, path = dijkstra(st, en)
+dis, cost, path = dijkstra(st, en)
 
 print("Shortest path: ", end = '')
 sep = ''
@@ -57,3 +58,4 @@ for v in path:
   sep = '->'
 print()
 print('Shortest distance: ', dis)
+print('Totol energy cost: ', cost)
