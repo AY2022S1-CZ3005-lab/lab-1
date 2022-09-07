@@ -71,7 +71,7 @@ def astar(st, en):
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
       next = state(d + w, co + c, v)
-      if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co >= budget:
+      if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co > budget:
         continue
       cost[v] = c + co
       dis[v] = d + w
