@@ -2,25 +2,16 @@ import json
 from queue import PriorityQueue
 from time import time
 
-with open('G.json') as f:
-  G = json.load(f)
+from ReadGraph import readGraph
 
-with open('Coord.json') as f:
-  Coord = json.load(f)
-
-with open('Dist.json') as f:
-  Dist = json.load(f)
-
-with open('Cost.json') as f:
-  Cost = json.load(f)
+G, Coord, Dist, Cost = readGraph()
 
 n = len(G)
 m = len(Dist)
 st = 1
 en = 50
-iteration_cnt = 0
 
-def dijkstra(st, en):
+def dijkstra(G, Dist, Cost, st, en):
   #init
   global iteration_cnt
   vis = [False] * (n + 1)
@@ -58,7 +49,8 @@ print('-------- Running Task 1 --------')
 print()
 
 begin_time = time()
-dis, cost, path = dijkstra(st, en)
+iteration_cnt = 0
+dis, cost, path = dijkstra(G, Dist, Cost, st, en)
 time_used = time() - begin_time
 
 print("Shortest path: ", end = '')

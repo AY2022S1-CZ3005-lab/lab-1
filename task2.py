@@ -2,27 +2,18 @@ import json
 from queue import PriorityQueue
 from time import time
 
-with open('G.json') as f:
-  G = json.load(f)
+from ReadGraph import readGraph
 
-with open('Coord.json') as f:
-  Coord = json.load(f)
-
-with open('Dist.json') as f:
-  Dist = json.load(f)
-
-with open('Cost.json') as f:
-  Cost = json.load(f)
+G, Coord, Dist, Cost = readGraph()
 
 n = len(G)
 m = len(Dist)
 st = 1
 en = 50
 budget = 287932
-iteration_cnt = 0
 
 # guarantee the cost is minimum
-def UCS(st, en):
+def UCS(G, Dist, Cost, st, en):
   # init
   global iteration_cnt
   pa = dict()
@@ -65,7 +56,8 @@ print('-------- Running Task 2 --------')
 print()
 
 begin_time = time()
-dis, cost, path = UCS(st, en)
+iteration_cnt = 0
+dis, cost, path = UCS(G, Dist, Cost, st, en)
 time_used = time() - begin_time
 
 print('Shortest path: ', end = '')
