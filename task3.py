@@ -1,6 +1,7 @@
 from math import sqrt
 import json
 from queue import PriorityQueue
+from time import time
 
 with open('G.json') as f:
   G = json.load(f)
@@ -19,11 +20,13 @@ m = len(Dist)
 st = 1
 en = 50
 budget = 287932
+iteration_cnt = 0
 
 h = [0] * (n + 1)
 
 (en_x, en_y) = Coord[str(en)]
 
+# pre-calculate h(x) functoin
 for i in range(1, n + 1):
   (x, y) = Coord[str(i)]
   h[i] = sqrt((x - en_x) ** 2 + (y - en_y) ** 2)
@@ -43,17 +46,20 @@ class state:
   def __eq__(self, other):
       return (self.d, self.co, self.u) == (other.d, other.co, other.u)
 
-
 # guarantee the cost is minimum
 def astar(st, en):
+  # init
+  global iteration_cnt
   pa = dict()
   vis = set()
   pq = PriorityQueue()
   cost = [float('inf')] * (n + 1)
   dis = [float('inf')] * (n + 1)
+
   pq.put(state(0, 0, st))
   pa[state(0, 0, st)] = None
   while not pq.empty():
+    iteration_cnt += 1
     cur = pq.get()
     d = cur.d
     co = cur.co
@@ -80,8 +86,14 @@ def astar(st, en):
   # no path
   return float('inf'), float('inf'), []
 
+# Run task 3
+print()
+print('-------- Running Task 3 --------')
+print()
 
+begin_time = time()
 dis, cost, path = astar(st, en)
+time_used = time() - begin_time
 
 print('Shortest path: ', end = '')
 sep = ''
@@ -91,3 +103,5 @@ for v in path:
 print()
 print('Shortest distance: ', dis)
 print('Total energy cost: ', cost)
+print(f'Iteration round: {iteration_cnt}')
+print(f'Time used: {time_used}')

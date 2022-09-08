@@ -1,6 +1,12 @@
 from math import sqrt
 import json
 
+print('-------- Checking input data --------')
+print()
+
+def indent():
+  print("******** ", end = '')
+
 filenames = ['Coord', 'Cost', 'Dist', 'G']
 filesz = {
   'Coord': 264346,
@@ -26,7 +32,8 @@ Cost = data['Cost']
 G = data['G']
 Dist = data['Dist']
 
-print('data is complete')
+indent()
+print('Files are complete')
 
 # no negative cost / edges
 for key, value in Cost.items():
@@ -35,7 +42,8 @@ for key, value in Cost.items():
 for key, value in Dist.items():
   assert(value >= 0)
 
-print('good for dijkstra')
+indent()
+print('Dist is okay for dijkstra')
 # edge(u, v) >= physical dis(u, v)
 n = len(G)
 eps = 1e-5
@@ -48,6 +56,7 @@ for key, value in Dist.items():
   (x2, y2) = Coord[v]
   phy_dis = sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
   assert(phy_dis <= value)
-print('coord and dist are legal')
 
-print('all good')
+indent()
+print('Coord and Dist are legal')
+print('🎉🎉🎉All good🎉🎉🎉')

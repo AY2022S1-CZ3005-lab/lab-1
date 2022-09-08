@@ -1,6 +1,6 @@
 import json
-from operator import ne
 from queue import PriorityQueue
+from time import time
 
 with open('G.json') as f:
   G = json.load(f)
@@ -19,17 +19,22 @@ m = len(Dist)
 st = 1
 en = 50
 budget = 287932
+iteration_cnt = 0
 
 # guarantee the cost is minimum
 def UCS(st, en):
+  # init
+  global iteration_cnt
   pa = dict()
   vis = set()
   pq = PriorityQueue()
   cost = [float('inf')] * (n + 1)
   dis = [float('inf')] * (n + 1)
+
   pq.put((0, 0, st))
   pa[(0, 0, st)] = None
   while not pq.empty():
+    iteration_cnt += 1
     cur = pq.get()
     (d, co, u) = cur
     if u == en: 
@@ -54,8 +59,14 @@ def UCS(st, en):
   # no path
   return float('inf'), float('inf'), []
 
+# Run task 2
+print()
+print('-------- Running Task 2 --------')
+print()
 
+begin_time = time()
 dis, cost, path = UCS(st, en)
+time_used = time() - begin_time
 
 print('Shortest path: ', end = '')
 sep = ''
@@ -65,3 +76,5 @@ for v in path:
 print()
 print('Shortest distance: ', dis)
 print('Total energy cost: ', cost)
+print(f'Iteration round: {iteration_cnt}')
+print(f'Time used: {time_used}')
