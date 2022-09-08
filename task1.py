@@ -1,4 +1,3 @@
-import json
 from queue import PriorityQueue
 from time import time
 
@@ -6,11 +5,16 @@ from ReadGraph import readGraph
 
 G, Coord, Dist, Cost = readGraph()
 
+# n: num of nodes
+# st: start vertex
+# en: end vertex
+# budget: cost constraint
 n = len(G)
-m = len(Dist)
 st = 1
 en = 50
+budget = 287932
 
+# implementation without dis array optimization
 def dijkstra(G, Dist, Cost, st, en):
   #init
   global iteration_cnt
@@ -21,6 +25,8 @@ def dijkstra(G, Dist, Cost, st, en):
   pq.put((0, 0, st, 0))
   while not pq.empty():
     iteration_cnt += 1
+    # current state
+    # (dis, cost, vertex, parent in searching tree)
     (d, co, u, fa) = pq.get()
     if u == en:  # UCS optimiaztion
       p = fa
@@ -33,13 +39,16 @@ def dijkstra(G, Dist, Cost, st, en):
     if vis[u]:
       continue
     vis[u] = True
+    # only until when the optimal path is decided
+    # we record we parent of u (different from using a dis array)
     pa[u] = fa
     for v_str in G[str(u)]:
+      # for each edge(u, v) with lenght = w and cost = c
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
       if not vis[v]:
-        pq.put((d + w, co +c, v, u))
+        pq.put((d + w, co + c, v, u))
   # no path
   return float('inf'), float('inf'), []
   
@@ -59,8 +68,8 @@ for v in path:
   print(sep + str(v), end = '')
   sep = '->'
 print()
-print('Shortest distance: ', dis)
-print('Total energy cost: ', cost)
+print(f'Shortest distance: {dis}')
+print(f'Total energy cost: {cost}')
 print(f'Iteration round: {iteration_cnt}')
 print(f'Time used: {time_used}')
 print()

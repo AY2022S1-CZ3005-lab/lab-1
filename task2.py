@@ -1,4 +1,3 @@
-import json
 from queue import PriorityQueue
 from time import time
 
@@ -6,8 +5,11 @@ from ReadGraph import readGraph
 
 G, Coord, Dist, Cost = readGraph()
 
+# n: num of nodes
+# st: start vertex
+# en: end vertex
+# budget: cost constraint
 n = len(G)
-m = len(Dist)
 st = 1
 en = 50
 budget = 287932
@@ -27,6 +29,8 @@ def UCS(G, Dist, Cost, st, en):
   while not pq.empty():
     iteration_cnt += 1
     cur = pq.get()
+    # current state
+    # (dis, cost, vertex)
     (d, co, u) = cur
     if u == en: 
       path = []
@@ -37,15 +41,19 @@ def UCS(G, Dist, Cost, st, en):
       path.reverse()
       return d, co, path
     for v_str in G[str(u)]:
+      # for each edge(u, v) with lenght = w and cost = c
       v = int(v_str)
       w = Dist[str(u) + ',' + str(v)]
       c = Cost[str(u) + ',' + str(v)]
       next = (d + w, co + c, v)
+      # if next state is searched or worse than searched or break the constraint
+      # abondon the state
       if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co > budget:
         continue
-      cost[v] = c + co
-      dis[v] = d + w
-      pa[next] = cur
+      # the state is either not searched or better than previous state of vertex u
+      cost[v] = c + co # update the better state
+      dis[v] = d + w  # update the better state
+      pa[next] = cur # record next state's parent
       pq.put(next)
   # no path
   return float('inf'), float('inf'), []
@@ -66,7 +74,7 @@ for v in path:
   print(sep + str(v), end = '')
   sep = '->'
 print()
-print('Shortest distance: ', dis)
-print('Total energy cost: ', cost)
+print(f'Shortest distance: {dis}')
+print(f'Total energy cost: {cost}')
 print(f'Iteration round: {iteration_cnt}')
 print(f'Time used: {time_used}')
