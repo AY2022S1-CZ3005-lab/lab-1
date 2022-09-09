@@ -1,5 +1,6 @@
 from math import sqrt
 import json
+import os
 
 print('-------- Checking input data --------')
 print()
@@ -59,4 +60,7 @@ for key, value in Dist.items():
 
 indent()
 print('Coord and Dist are legal')
-print('🎉🎉🎉All good🎉🎉🎉')
+if os.name == 'nt':
+  print('>>>All good<<<')
+else:
+  print('🎉🎉🎉All good🎉🎉🎉')
