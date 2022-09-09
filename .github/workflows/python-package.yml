@@ -11,13 +11,14 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10"]
         os: [ubuntu-latest, macOS-latest, windows-latest]
-   - name: Run the program scripts
-      run: |
-        python3 main.py
+
+        steps:
+         - name: Run the program scripts
+            run: |
+              python3 main.py
