@@ -14,7 +14,6 @@ st = 1
 en = 50
 budget = 287932
 
-# implementation without dis array optimization
 def dijkstra(G, Dist, Cost, st, en):
   #init
   global iteration_cnt
@@ -28,7 +27,7 @@ def dijkstra(G, Dist, Cost, st, en):
     # current state
     # (dis, cost, vertex, parent in searching tree)
     (d, co, u, fa) = pq.get()
-    if u == en:  # UCS optimiaztion
+    if u == en:
       p = fa
       path = [en]
       while p != 0:

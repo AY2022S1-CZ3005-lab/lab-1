@@ -24,6 +24,9 @@ def UCS(G, Dist, Cost, st, en):
   cost = [float('inf')] * (n + 1)
   dis = [float('inf')] * (n + 1)
 
+  cost[st] = 0
+  dis[st] = 0
+  vis.add((0, 0, st))
   pq.put((0, 0, st))
   pa[(0, 0, st)] = None
   while not pq.empty():
@@ -51,6 +54,7 @@ def UCS(G, Dist, Cost, st, en):
       if next in vis or (c + co >= cost[v] and d + w >= dis[v]) or c + co > budget:
         continue
       # the state is either not searched or better than previous state of vertex u
+      vis.add(next) # the state is going to be visited
       cost[v] = c + co # update the better state
       dis[v] = d + w  # update the better state
       pa[next] = cur # record next state's parent
